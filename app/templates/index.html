@@ -83,8 +83,171 @@
 			</div>
 		</div>
 	</div>
-	<script>
-	  // your solution here
+<script>
+  // your solution here
+
+  $(document).ready(() => {
+    let rotateBox = new Hammer(document.querySelector("#rotate-box"), {recognizers: [[Hammer.Rotate],]});
+    let pinchBox = new Hammer(document.querySelector("#pinch-box"), {recognizers: [[Hammer.Pinch],]});
+    let pressBox = new Hammer(document.querySelector("#press-box"));
+    let panBox = new Hammer(document.querySelector("#pan-box"), {recognizers: [[Hammer.Pan, {direction: Hammer.DIRECTION_ALL}], ]});
+    let tapBox = new Hammer(document.querySelector("#tap-box"));
+    let swipeBox = new Hammer(document.querySelector("#swipe-box"), {recognizers: [[Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}], ]});
+    var vrotation;
+    var curRot = 0;
+    rotateBox.on("rotate", function(e) {
+//       $("#rotate-box").css({"transform": "rotate(" + e.rotation + ")"}, 500, function() {});
+      if (vrotation != null){
+        $("h6").detach();
+      }
+      curRot = (curRot + e.rotation) % 360;
+      vrotation = "<h6>Rotated " + Math.round(curRot) + "deg</h6>";
+      $("#rotate-box").append(vrotation);      
+//       alert(e.rotation);
+    });
+    pinchBox.on("pinch", function(e) {
+      $("#pinch-box").animate({height: "+=" +  (e.scale - 1).toString(), width: "+=" + (e.scale - 1).toString()}, 1, function() {});
+    });
+    pressBox.on("press", function(e) {
+      $("#press-box").fadeOut().delay(50).fadeIn();
+//       alert("Pressed!");
+    });
+    panBox.on("pan", function(e) {
+      $("#pan-box").animate({"letter-spacing": (e.deltaX * 0.1) + "px", "font-weight": "-=" + (e.deltaY * 0.05)}, 1, function() {});
+//       alert(e.deltaY + " " + e.deltaX);
+    });
+    var vtap = 1;
+    tapBox.on("tap", function(e) {
+      $("#tap-box").parent().css("background-color", vtap ? "black" : "white");
+      vtap = ++vtap % 2;
+//       alert(e.rotation);
+    });
+    swipeBox.on("swipe", function(e) {
+      $("#swipe-box").animate({"font-size": "-=" + (e.velocityY).toString() + "rem", "text-indent": "+=" + (e.velocityX * 5).toString() + "rem", "color": "red"}, 1, function() {});
+//       alert(e.velocityY + " " + e.velocityX);
+    });
+//     swipeBox.on("swiperight", function(e) {
+//       alert("right" + e.deltaX);
+//     });
+    //       var screen = document.querySelector(".device-screen");
+    //       var small_box = document.querySelector(".small-box");
+    //       var rotate_box = document.querySelector("#rotate-box");
+    //       var pinch_box = document.querySelector("#pinch-box");
+    //       var press_box = document.querySelector("#press-box");
+    //       var pan_box = document.querySelector("#pan-box");
+    //       var tap_box = document.querySelector("#tap-box");
+    //       var swipe_box = document.querySelector("#swipe-box");
+    //       var cur = {
+    //         scale: 1,
+    //         angle: 0,
+    //         rx: 0,
+    //         ry: 0
+    //       };
+    //       let rotateBox = new Hammer.Manager(rotate_box, {
+    //         recognizers: [
+    //           [Hammer.Rotate, {
+    //             enable: true
+    //           }],
+    //         ]
+    //       });
+
+    //       let pinchBox = new Hammer.Manager(pinch_box, {
+    //         recognizers: [
+    //           [Hammer.Pinch, {
+    //             enable: true
+    //           }],
+    //         ]
+    //       });
+
+    //       let pressBox = new Hammer.Manager(press_box, {
+    //         recognizers: [
+    //           [Hammer.Press],
+    //         ]
+    //       });
+
+    //       let panBox = new Hammer.Manager(pan_box, {
+    //         recognizers: [
+    //           [Hammer.Pan, {
+    //             pointers: 0,
+    //             direction: 30
+    //           }],
+    //         ]
+    //       });
+
+    //       let tapBox = new Hammer.Manager(tap_box, {
+    //         recognizers: [
+    //           [Hammer.Tap],
+    //         ]
+    //       });
+
+    //       let swipeBox = new Hammer.Manager(swipe_box, {
+    //         recognizers: [
+    //           [Hammer.Swipe, {
+    //             direction: 30
+    //           }],
+    //         ]
+    //       });
+
+    //       let smallBox = new Hammer.Manager(small_box);
+
+    //       rotateBox.on("rotatestart rotatemove", (e) => {
+    //         $(this).css({
+    //           transform: rotate(e.rotation + cur.angle + 'deg')
+    //         });
+    //         cur.angle += e.rotation;
+    //       });
+    //       pinchBox.on("pinchstart pinchmove", (e) => {
+    //         $(this).css({
+    //           transform: scale(e.scale * cur.scale)
+    //         });
+    //         cur.scale *= e.scale;
+    //       });
+    //       pressBox.on("press", () => {
+    //         $(this).css({
+    //           opacity: $(this).css("opacity") * 0.8
+    //         });
+    //       });
+    //       panBox.on("panstart panmove", (e) => {
+    //         let curCol = $(this).css("background-color").match("/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/");
+
+    //         if (e.direction == DIRECTION_UP || e.direction == DIRECTION_DOWN) {
+    //           $(this).css({
+    //           "background-color": "rgb( " + Interger((curCol[1] + e.deltaY) % 255).toString() + ", " + Integer(curCol[2]).toString() + ", " + Integer(curCol[3]).toString() + ")"
+    //         });
+    //         }
+
+    //         else {
+    //           $(this).css({
+    //           "background-color": "rgb( " + Interger(curCol[1]).toString() + ", " + Integer((curCol[2] + e.deltaX) % 255).toString() + ", " + Integer(curCol[3]).toString() + ")"
+    //         });
+    //         }
+    //       });
+    //       tapBox.on("tap", () => {
+    //         $(this).css({
+    //           "background-color": "grey"
+    //         });
+    //       });
+    //       swipeBox.on("swipe", (e) => {
+    //         if (e.direction == DIRECTION_UP || e.direction == DIRECTION_DOWN) {
+    //           $(this).css({
+    //             transform: rotateY((e.velocityY - 0.3) / 0.3 * 180)
+    //           });
+    //         } else {
+    //           $(this).css({
+    //             transform: rotateX((e.velocityX - 0.3) / 0.3 * 180)
+    //           });
+    //         }
+    //       });
+    //       smallBox.on("hammer.input", (e) => {
+    //         if (e.isFinal) {
+    //           (this).fadeOut();
+    //           (this).css({
+    //             transform: "rotate(0) scale(1)"
+    //           });
+    //           (this).fadeIn();
+    //         }
+    //       });
+  }); 
   </script>
 </body>
 </html>
